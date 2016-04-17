@@ -8,7 +8,7 @@
 -define(CONNECT_TIMEOUT, 1000). %% 1 seconds
 
 send({RegIds, Message, Message_Id}, {Key, ErrorFun}) ->
-    lager:info("Message=~p; RegIds=~p~n", [Message, RegIds]),
+    error_logger:info_msg("Message=~p; RegIds=~p~n", [Message, RegIds]),
     GCMRequest = jsx:encode([{<<"registration_ids">>, RegIds}|Message]),
     ApiKey = string:concat("key=", Key),
 
@@ -16,7 +16,7 @@ send({RegIds, Message, Message_Id}, {Key, ErrorFun}) ->
         {ok, {{_, 200, _}, _Headers, GCMResponse}} ->
             Json = jsx:decode(response_to_binary(GCMResponse)),
             {Multicast, Success, Failure, Canonical, Results} = get_response_fields(Json),
-            Success =:= 1 andalso lager:info("Push sent success(RegIds=~p), message_id=~p,  multicast id=~p~n", [RegIds, Message_Id, Multicast]),
+            Success =:= 1 andalso error_logger:info_msg("Push sent success(RegIds=~p), message_id=~p,  multicast id=~p~n", [RegIds, Message_Id, Multicast]),
             case to_be_parsed(Failure, Canonical) of
                 true ->
                     parse_results(Results, RegIds, ErrorFun);
