@@ -22,7 +22,7 @@ start(Name, Key) ->
     start(Name, Key, fun handle_error/2).
 
 start(Name, Key, ErrorFun) ->
-    gcm_sup:start_child(Name, Key, ErrorFun).
+    zcgcm_sup:start_child(Name, Key, ErrorFun).
 
 %%--------------------------------------------------------------------
 %% @doc

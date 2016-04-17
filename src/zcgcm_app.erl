@@ -8,7 +8,10 @@
 
 
 start() ->
-  ensure([crypto, public_key, ssl, zcgcm]).
+  case ensure([asn1, crypto, public_key, ssl, zcgcm]) of
+  ok -> inets:start(), ok;
+  Error -> Error
+  end.
 
 
 %% @hidden
@@ -20,11 +23,25 @@ stop(_State) ->
   ok.
 
 
-%% @spec ensure([atom()]) -> ok | {error, term()}
-ensure([App | Apps]) ->
+ensure(App, Apps, 0) ->
   case application:start(App) of
     ok -> ensure(Apps);
     {error, {already_started, App}} -> ensure(Apps);
-    Error -> Error end;
+    {error, {not_started, App}} -> ensure(App, Apps, 1);
+    Error -> Error
+  end;
+
+ensure(App, Apps, 1) ->
+  case application:start(App) of
+    ok -> ensure(Apps);
+    {error, {already_started, App}} -> ensure(Apps);
+    Error -> Error
+  end.
+ 
+
+%% @spec ensure([atom()]) -> ok | {error, term()}
+ensure([App | Apps]) ->
+  ensure(App, Apps, 0);
 ensure([]) ->
   ok.
+  
