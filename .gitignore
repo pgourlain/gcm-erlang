@@ -1,4 +1,13 @@
-deps/
-.eunit
-ebin/
-.beam
+.eunit/*
+deps/*
+ebin
+*.djs.user
+*/Emakefile
+*/erl_crash.dump
+*.dpf.user
+data/*
+erl_crash.dump
+.rebar/*
+sent/
+**/Emakefile
+project/zcpush_tests/Tests/Reports/

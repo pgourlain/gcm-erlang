@@ -1,0 +1,13 @@
+{application, zcgcm,
+ [
+  {description, "An GCM client"},
+  {vsn, "1.0.0"},
+  {registered, [zcgcm_sup]},
+  {applications, [
+                  kernel,
+                  stdlib,
+                  ssl
+                 ]},
+  {mod, {zcgcm_app, []}},
+  {env, []}
+ ]}.
